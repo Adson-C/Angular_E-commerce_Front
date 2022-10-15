@@ -1,25 +1,22 @@
-<table class="table">
+<div class="main-content">
+    <div class="section-content section-content-p30">
 
-    <thead class="table-dark">
-        <tr>
-            <th></th>
-            <th>Nome</th>
-            <th>Preço</th>
-            <th>Unidade Estoque</th>
-        </tr>
+        <div class="container-fluid">
+            <div class="row">
+                <!--Loop de coleção do Produtos-->
+                <div *ngFor="let tempProduct of products" class="col-md-3">
+                    <div class="product-box">
+                        <img src="{{ tempProduct.imageUrl }}" class="img-responsive">
+                        <h1>{{ tempProduct.name }}</h1>
+                        <div class="price">{{ tempProduct.unitPrice | currency:'BRL' }}</div>
+                        <a href="#" class="primary-btn">Adicionar ao carrinho</a>
+                    </div>
 
-    </thead>
+                </div>
 
-    <tbody>
-        <tr *ngFor="let tempProduct of products">
-            <td class="align-meddle">
-                <img src="{{ tempProduct.imageUrl }}" height="50" />
-            </td>
-            <td class="align-meddle">{{ tempProduct.name }}</td>
-            <td class="align-meddle">{{ tempProduct.unitPrice | currency:'USD' }}</td>
-            <td class="align-meddle">{{ tempProduct.unitsInStock }}</td>
-        </tr>
-    </tbody>
+            </div>
+        
+        </div>
+    </div>
 
-
-</table>
+</div>

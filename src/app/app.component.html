@@ -11,17 +11,17 @@
       <nav class="navbar-sidebar">
         <ul class="list-unstyled navbar-list">
           <li>
-            <a href="#">Livros</a>
+            <a routerLink="/category/1" routerLinkActive="active-link">Livros</a>
           </li>
           <li>
-            <a href="#">Canecas de café</a>
+            <a routerLink="/category/2" routerLinkActive="active-link">Canecas de café</a>
           </li>
-          <li>
+         <!-- <li>
             <a href="#">Mouse Pads</a>
           </li>
           <li>
             <a href="#">Etiquetas de Bagagem</a>
-          </li>
+          </li>-->
         </ul>
       </nav>
     </div>
@@ -56,9 +56,8 @@
 
 
     <!-- MAIN CONTENT-->
-
-    <app-product-list></app-product-list>
-
+    <router-outlet></router-outlet>
+   
 
   </div>
 </div>

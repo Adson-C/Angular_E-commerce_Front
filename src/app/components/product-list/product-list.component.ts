@@ -1,3 +1,5 @@
+import { CartService } from './../../services/cart.service';
+import { CartItem } from './../../common/cart-itme';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Product } from 'src/app/common/product';
@@ -24,6 +26,7 @@ export class ProductListComponent implements OnInit {
   
   
   constructor(private productService: ProductService,
+              private cartService: CartService,
               private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -102,5 +105,13 @@ export class ProductListComponent implements OnInit {
       };
     }  
 
+    addToCart(theProduct: Product) {
+      console.log(`Adicionado ao carrinho: ${theProduct.name}, ${theProduct.unitPrice}`);
+
+      // adicionando cart items
+      const theCartItem = new CartItem(theProduct);
+
+      this.cartService.addToCart(theCartItem);
+    }
 
 }

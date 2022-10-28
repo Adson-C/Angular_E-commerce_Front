@@ -1,0 +1,249 @@
+<div class="main-content page-m">
+    <div class="section-content section-content-p30">
+
+        <div class="container-fluid">
+
+            <form [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
+
+                <div formGroupName="customer" class="form-area">
+                    <h3>Cliente</h3>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>Nome:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <input formControlName="firstName" type="text">
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>SobreNome:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <input formControlName="lastName" type="text">
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>Email:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <input formControlName="email" type="text">
+                           </div>
+                       </div>
+                    </div>
+                </div>
+
+                <!--Endereço de entrega-->
+                <div formGroupName="shippingAddress" class="form-area">
+                    <h3>Endereço de entrega</h3>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>País:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <select formControlName="country">
+                                <option >Brasil</option>
+
+                              </select>
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>Rua:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <input formControlName="street" type="text">
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>Cidade:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <input formControlName="city" type="text">
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>Estado:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <select formControlName="state">
+                                <option >SP</option>
+
+                              </select>
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>CEP:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <input formControlName="zipCode" type="text">
+                           </div>
+                       </div>
+                    </div>
+
+                </div>
+
+                <!--adicionar um caixa se o endereço de entrega for igual a endereço-->
+                <div class="input-space">
+                    <label au-checkbox>
+                        <input type="checkbox" (change)="copyShippingAddressToBillingAddress($event)">
+                        <span class="au-checkmark"></span>Endereço de cobrança é igual ao endereço de entrega. 
+                    </label>
+                </div>
+
+                <!--Endereço de cobrança-->
+
+                <div formGroupName="billingAddress" class="form-area">
+                    <h3>Endereço de Cobrança</h3>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>País:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <select formControlName="country">
+                                <option >Brasil</option>
+
+                              </select>
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>Rua:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <input formControlName="street" type="text">
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>Cidade:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <input formControlName="city" type="text">
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>Estado:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <select formControlName="state">
+                                <option >SP</option>
+
+                              </select>
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>CEP:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <input formControlName="zipCode" type="text">
+                           </div>
+                       </div>
+                    </div>
+
+                </div>
+
+                <!--Cartão de Crédito-->
+                <div formGroupName="creditCart" class="form-area">
+                    <h3>Cartão de Crédito</h3>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>Tipo do Cartão:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <select formControlName="cartType">
+                                <option >Visa</option>
+                                <option >MasterCard</option>
+                              </select>
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>Nome no Cartão:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <input formControlName="nameOnCart" type="text">
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>Numero do Cartão:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <input formControlName="cardNumber" type="text">
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>Código de segurança:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <input formControlName="securityCode" type="text">
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>Data de validade:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <select formControlName="expirationMonth">
+                                <option >Do To</option>
+                                
+                              </select>
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>Ano de validade:</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">                       
+                              <select formControlName="expirationYea">
+                                <option >Do To</option>
+                                
+                              </select>
+                           </div>
+                       </div>
+                    </div>
+
+                </div>      
+                <!--Revisão da pedido-->
+                <div class="form-area">
+                    <h3>Revise seu pedido</h3>
+                    <p>Quantidade Total: {{ totalQuantity}}</p>
+                    <p>Frete: Gratis</p>
+                    <p>Preço Total: {{ totalPrice  | currency: 'BRL'}}</p>
+
+                </div>
+                
+                <!--botão do formulário-->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-info">Comprar</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>

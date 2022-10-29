@@ -1,3 +1,4 @@
+import { AdsShopFormService } from './../../services/ads-shop-form.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -13,7 +14,11 @@ export class CheckoutComponent implements OnInit {
   totalPrice: number = 0;
   totalQuantity: number = 0;
 
-  constructor(private formBuild: FormBuilder) { }
+  creditCardYears: number[] = [];
+  creditCardMonths: number[] = [];
+
+  constructor(private formBuild: FormBuilder, 
+              private adsShopFormService: AdsShopFormService) { }
 
   ngOnInit(): void {
 
@@ -46,6 +51,25 @@ export class CheckoutComponent implements OnInit {
         expirationYea: ['']
       })
     });
+
+    // popular o mes
+    const startMonth: number = new Date().getMonth() + 1;
+    console.log('startMonth: ' + startMonth);
+
+    this.adsShopFormService.getCreditCardMonths(startMonth).subscribe(
+      data => {
+        console.log("Retrieved credit card months: " + JSON.stringify(data));
+        this.creditCardMonths = data;
+      }
+    );
+      // popular o ano
+    this.adsShopFormService.getCreditCardYears().subscribe(
+      data => {
+        console.log("Retrieved credit card Years: " + JSON.stringify(data));
+        this.creditCardYears = data;
+      }
+    );
+
   } 
 
   copyShippingAddressToBillingAddress(event) {
@@ -64,4 +88,8 @@ export class CheckoutComponent implements OnInit {
     console.log(this.checkoutFormGroup.get('customer').value);
     console.log("Email é esse " + this.checkoutFormGroup.get('customer').value.email);
   }
+
+
+
+
 }

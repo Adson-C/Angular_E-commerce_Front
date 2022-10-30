@@ -66,10 +66,11 @@ export class CheckoutComponent implements OnInit {
                                      AdsShopValitadors.notOnlyWhitespace])
       }),
       creditCart: this.formBuild.group({
-        cartType: [''],
-        nameOnCart: [''],
-        cardNumber: [''],
-        securityCode: [''],
+        cartType: new FormControl('', [Validators.required]),
+        nameOnCart: new FormControl('', [Validators.required, Validators.minLength(2),
+                                         AdsShopValitadors.notOnlyWhitespace]),
+        cardNumber: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{16}$')]),
+        securityCode: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{3}$')]),
         expirationMonth: [''],
         expirationYea: ['']
       })
@@ -119,6 +120,12 @@ export class CheckoutComponent implements OnInit {
   get billingAddressState() { return this.checkoutFormGroup.get('billingAddress.state'); }
   get billingAddressCountry() { return this.checkoutFormGroup.get('billingAddress.country'); }
   get billingAddressZipCode() { return this.checkoutFormGroup.get('billingAddress.zipCode'); }
+
+  get creditCartType() { return this.checkoutFormGroup.get('creditCart.cartType'); }
+  get creditCartNameOnCart() { return this.checkoutFormGroup.get('creditCart.nameOnCart'); }
+  get creditCartNumber() { return this.checkoutFormGroup.get('creditCart.cardNumber'); }
+  get creditCartSecurityCode() { return this.checkoutFormGroup.get('creditCart.securityCode'); }
+  
 
   copyShippingAddressToBillingAddress(event) {
 

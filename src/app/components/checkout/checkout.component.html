@@ -118,6 +118,10 @@
                                 </div>
                                </div>
 
+                               <div *ngIf="shippingAddressStreet.errors.minlength">
+                                É obrigatório pelo menos 2 caracteres !
+                             </div>
+
                             </div>
                         </div>
                     </div>
@@ -136,7 +140,10 @@
                                 </div>
                                </div>
 
-                                
+                               <div *ngIf="shippingAddressCity.errors.minlength">
+                                É obrigatório pelo menos 2 caracteres !
+                             </div>
+
                             </div>
                         </div>
                     </div>
@@ -176,6 +183,10 @@
                                    CEP é obrigatório
                                 </div>
                                </div>
+
+                               <div *ngIf="shippingAddressZipCode.errors.minlength">
+                                É obrigatório pelo menos 2 caracteres !
+                             </div>
 
                             </div>
                         </div>
@@ -232,6 +243,10 @@
                                 </div>
                                </div>
 
+                               <div *ngIf="billingAddressStreet.errors.minlength">
+                                É obrigatório pelo menos 2 caracteres !
+                             </div>
+
                             </div>
                         </div>
                     </div>
@@ -249,6 +264,10 @@
                                    Cidade é obrigatório
                                 </div>
                                </div>
+
+                               <div *ngIf="billingAddressCity.errors.minlength">
+                                É obrigatório pelo menos 2 caracteres !
+                             </div>
 
                             </div>
                         </div>
@@ -290,6 +309,10 @@
                                 </div>
                                </div>
 
+                               <div *ngIf="billingAddressZipCode.errors.minlength">
+                                É obrigatório pelo menos 2 caracteres !
+                             </div>
+
                             </div>
                         </div>
                     </div>
@@ -307,7 +330,17 @@
                                 <select formControlName="cartType">
                                     <option>Visa</option>
                                     <option>MasterCard</option>
+                                    
                                 </select>
+
+                                <div *ngIf="creditCartType.invalid && (creditCartType.dirty || creditCartType.touched )"
+                                class="alert alert-danger mt-1">
+
+                                <div *ngIf="creditCartType.errors.required">
+                                   Tipo do Cartão é obrigatório
+                                </div>
+                               </div>
+
                             </div>
                         </div>
                     </div>
@@ -317,8 +350,21 @@
                         <div class="col-md-9">
                             <div class="input-space">
                                 <input formControlName="nameOnCart" type="text">
+
+                                <div *ngIf="creditCartNameOnCart.invalid && (creditCartNameOnCart.dirty || creditCartNameOnCart.touched )"
+                                class="alert alert-danger mt-1">
+
+                                <div *ngIf="creditCartNameOnCart.errors.required">
+                                 Nome do cartão é obrigatório
+                                </div>
+                            
+                               <div *ngIf="creditCartNameOnCart.errors.minlength">
+                                É obrigatório pelo menos 2 caracteres !
+                             </div>
+
                             </div>
                         </div>
+                    </div>
                     </div>
 
                     <div class="row">
@@ -326,18 +372,46 @@
                         <div class="col-md-9">
                             <div class="input-space">
                                 <input formControlName="cardNumber" type="text">
+
+                                <div *ngIf="creditCartNumber.invalid && (creditCartNumber.dirty || creditCartNumber.touched )"
+                                class="alert alert-danger mt-1">
+
+                                <div *ngIf="creditCartNumber.errors.required">
+                                 Numero do cartão é obrigatório
+                                </div>
+                               
+
+                               <div *ngIf="creditCartNumber.errors.pattern">
+                                É obrigatório pelo menos 16 dígitos !
+                             </div>
+
                             </div>
                         </div>
                     </div>
+                </div>
 
                     <div class="row">
                         <div class="col-md-2"><label>Código de segurança:</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
                                 <input formControlName="securityCode" type="text">
+
+                                <div *ngIf="creditCartSecurityCode.invalid && (creditCartSecurityCode.dirty || creditCartSecurityCode.touched )"
+                                class="alert alert-danger mt-1">
+
+                                <div *ngIf="creditCartSecurityCode.errors.required">
+                                 Código de segurança cartão é obrigatório
+                                </div>
+                              
+
+                               <div *ngIf="creditCartSecurityCode.errors.pattern">
+                                É obrigatório pelo menos 3 dígitos !
+                             </div>
+
                             </div>
                         </div>
                     </div>
+                </div>
 
                     <div class="row">
                         <div class="col-md-2"><label>Data de validade:</label></div>

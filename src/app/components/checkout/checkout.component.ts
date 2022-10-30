@@ -1,3 +1,4 @@
+import { AdsShopValitadors } from './../../validators/ads-shop-valitadors';
 import { AdsShopFormService } from './../../services/ads-shop-form.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -32,10 +33,17 @@ export class CheckoutComponent implements OnInit {
 
     this.checkoutFormGroup = this.formBuild.group({
       customer: this.formBuild.group({
-        firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-        lastName: new FormControl('', [Validators.required, Validators.minLength(2)]),
+        firstName: new FormControl('', 
+                                  [Validators.required, 
+                                  Validators.minLength(2), 
+                                  AdsShopValitadors.notOnlyWhitespace]),
+        lastName: new FormControl('',
+                                 [Validators.required, 
+                                  Validators.minLength(2),
+                                  AdsShopValitadors.notOnlyWhitespace]),
         email: new FormControl('',
-                              [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')])
+                              [Validators.required, 
+                              Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')])
       }),
       shippingAddress: this.formBuild.group({
         street: [''],

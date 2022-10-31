@@ -1,3 +1,4 @@
+import { CartService } from './../../services/cart.service';
 import { AdsShopValitadors } from './../../validators/ads-shop-valitadors';
 import { AdsShopFormService } from './../../services/ads-shop-form.service';
 import { Component, OnInit } from '@angular/core';
@@ -27,9 +28,12 @@ export class CheckoutComponent implements OnInit {
 
 
   constructor(private formBuild: FormBuilder,
-    private adsShopFormService: AdsShopFormService) { }
+              private adsShopFormService: AdsShopFormService,
+              private cartService: CartService) { }
 
   ngOnInit(): void {
+
+    this.reviewCartDetails();
 
     this.checkoutFormGroup = this.formBuild.group({
       customer: this.formBuild.group({
@@ -102,6 +106,16 @@ export class CheckoutComponent implements OnInit {
       }
     );
 
+  }
+  reviewCartDetails() {
+    // escrevendo serviço de quantidade total
+    this.cartService.totalQuantity.subscribe(
+    totalQuantity => this.totalQuantity = totalQuantity
+    );
+    // escrevendo serviço de Preço total
+    this.cartService.totalPrice.subscribe(
+    totalPrice => this.totalPrice = totalPrice
+    );
   }
 
   get firstName() { return this.checkoutFormGroup.get('customer.firstName'); }

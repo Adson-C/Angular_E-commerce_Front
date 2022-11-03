@@ -1,3 +1,8 @@
+import { Purchase } from './../../common/purchase';
+import { OrderItem } from './../../common/order-item';
+import { Order } from './../../common/order';
+import { Router } from '@angular/router';
+import { CheckoutService } from './../../services/checkout.service';
 import { CartService } from './../../services/cart.service';
 import { AdsShopValitadors } from './../../validators/ads-shop-valitadors';
 import { AdsShopFormService } from './../../services/ads-shop-form.service';
@@ -29,7 +34,9 @@ export class CheckoutComponent implements OnInit {
 
   constructor(private formBuild: FormBuilder,
               private adsShopFormService: AdsShopFormService,
-              private cartService: CartService) { }
+              private cartService: CartService,
+              private checkoutService: CheckoutService,
+              private router: Router) { }
 
   ngOnInit(): void {
 
@@ -161,14 +168,45 @@ export class CheckoutComponent implements OnInit {
 
     if (this.checkoutFormGroup.invalid) {
       this.checkoutFormGroup.markAllAsTouched();
+      return;
     }
+    // pegando order
+    let order = new Order();
+    order.totalPrice = this.totalPrice;
+    order.totalQuantity = this.totalQuantity;
 
-    console.log(this.checkoutFormGroup.get('customer').value);
-    console.log("Email é esse " + this.checkoutFormGroup.get('customer').value.email);
+    // pegando os Items
+    const cartItems = this.cartService.cartItems;
 
-    console.log("Endereço de entrega " + this.checkoutFormGroup.get('shippingAddress').value.country.name);
-    console.log("Endereço de entrega " + this.checkoutFormGroup.get('shippingAddress').value.state.name);
-  }
+    // criando pedido de item 
+   /* let orderItems: OrderItem[] = [];
+    for (let i=0; i < cartItems.length; i++)
+      orderItems[i] = new OrderItem(cartItems[i]);
+      */
+    // 
+    let orderItems: OrderItem[] = cartItems.map(tempCartItem => new OrderItem(tempCartItem));
+
+    // pegando a compra
+    let purchase =  new Purchase();
+
+    // populando a compra - Cliente
+    purchase.customer = this.checkoutFormGroup.controls['customer'].value;
+    // populando a compra - Endereço
+    purchase.shippingAddress = this.checkoutFormGroup.controls['shippingAddress'].value;
+    const shippingState: State = JSON.parse(JSON.stringify(purchase.shippingAddress.state));
+    const shippingCountry: Country = JSON.parse(JSON.stringify(purchase.shippingAddress.country));
+    purchase.shippingAddress.state = shippingState.name;
+    purchase.shippingAddress.country = shippingCountry.name;
+
+    // populando a compra - Endereço de cobrança
+    purchase.billingAddress = this.checkoutFormGroup.controls['billingAddress'].value;
+    const billingState: State = JSON.parse(JSON.stringify(purchase.billingAddress.state));
+    const billingCountry: Country = JSON.parse(JSON.stringify(purchase.billingAddress.country));
+    purchase.billingAddress.state = billingState.name;
+    purchase.billingAddress.country = billingCountry.name;
+
+    }
+    
 
   handleMonthsAndYears() {
 

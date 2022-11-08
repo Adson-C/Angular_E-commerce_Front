@@ -205,7 +205,39 @@ export class CheckoutComponent implements OnInit {
     purchase.billingAddress.state = billingState.name;
     purchase.billingAddress.country = billingCountry.name;
 
+    // popular as compras e os pedidos os pedidosItems
+    purchase.order = order;
+    purchase.orderItems = orderItems;
+
+    // chamando a API de CheckoutService
+    this.checkoutService.placeOrder(purchase).subscribe(
+      {
+        next: response => {
+          alert(`Seu pedido foi recebido.\nNumero do rastreamento: ${response.orderTrackingNumber}`);
+
+          // reset Carrinho 
+          this.resetCart();
+        },
+        error: err => {
+          alert(`Ocorreu um erro: ${err.message}`);
+        }
+      }
+    );
+
     }
+  resetCart() {
+    // reset carrinho 
+    this.cartService.cartItems = [];
+    this.cartService.totalPrice.next(0);
+    this.cartService.totalQuantity.next(0);
+
+    // reset formulario
+    this.checkoutFormGroup.reset();
+
+    // navegando de volta aos produtos
+    this.router.navigateByUrl("/products");
+
+  }
     
 
   handleMonthsAndYears() {

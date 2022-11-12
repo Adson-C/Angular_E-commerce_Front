@@ -1,9 +1,9 @@
 /*
-copiando styles => .au-btn.submit
-renomeando a security-btn
-mudando a borda 10px
+    Copy from styles.css -> .au-btn-submit
+    Rename as .security-btn
+    Change border to 10px
 */
-.security-btn{
+.security-btn {
     position:relative;
     right:0;
     min-width:95px;
@@ -13,12 +13,11 @@ mudando a borda 10px
     -moz-border-radius:3px;
     border-radius:43px;
     background:#205b8d
-
 }
 
 /*
-copiando styles.css => .form-header
-renomeando a .login-status-header
+    Copy from styles.css -> .form-header
+    Rename as .login-status-header
 */
 .login-status-header{
     display:-webkit-box;

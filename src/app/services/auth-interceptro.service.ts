@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { OktaAuth } from '@okta/okta-auth-js';
 import { OKTA_AUTH } from '@okta/okta-angular';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
@@ -19,7 +20,8 @@ export class AuthInterceptroService implements HttpInterceptor {
  private async handleAccess(request: HttpRequest<any>, next: HttpHandler): Promise<HttpEvent<any>> {
     
     // acesso ao token
-  const securedEndpoints = ['http://localhost:8080/api/orders'];
+    const theEndpoint = environment.adshopApiUrl + '/orders'
+  const securedEndpoints = [theEndpoint];
 
   if(securedEndpoints.some(url => request.urlWithParams.includes(url))) {
 

@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { Purchase } from './../../common/purchase';
 import { OrderItem } from './../../common/order-item';
 import { Order } from './../../common/order';
@@ -10,6 +11,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Country } from 'src/app/common/country';
 import { State } from 'src/app/common/state';
+import { PaymentInfo } from 'src/app/common/payment-info';
+
 
 @Component({
   selector: 'app-checkout',
@@ -33,6 +36,12 @@ export class CheckoutComponent implements OnInit {
 
   storage: Storage = sessionStorage;
 
+  // iniciando Stripe API
+  stripe = Stripe(environment.stripePublishableKey);
+
+  paymentInfo: PaymentInfo = new PaymentInfo();
+  cardElement: any;
+  displayError: any = "";
 
   constructor(private formBuild: FormBuilder,
               private adsShopFormService: AdsShopFormService,
@@ -41,6 +50,9 @@ export class CheckoutComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
+
+    // configurando stripe payment form
+    this.setupStripePaymentForm();
 
     // ler usuario logado  email
     const theEmail = JSON.parse(this.storage.getItem('userEmail')!);
@@ -83,6 +95,7 @@ export class CheckoutComponent implements OnInit {
                                      AdsShopValitadors.notOnlyWhitespace])
       }),
       creditCart: this.formBuild.group({
+        /* 
         cartType: new FormControl('', [Validators.required]),
         nameOnCart: new FormControl('', [Validators.required, Validators.minLength(2),
                                          AdsShopValitadors.notOnlyWhitespace]),
@@ -90,10 +103,14 @@ export class CheckoutComponent implements OnInit {
         securityCode: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{3}$')]),
         expirationMonth: [''],
         expirationYea: ['']
+        */
       })
+      
     });
+    
 
     // popular o mes
+    /*
     const startMonth: number = new Date().getMonth() + 1;
     console.log('startMonth: ' + startMonth);
 
@@ -110,6 +127,7 @@ export class CheckoutComponent implements OnInit {
         this.creditCardYears = data;
       }
     );
+*/
 
     // popular countries
     this.adsShopFormService.getCountries().subscribe(
@@ -118,7 +136,30 @@ export class CheckoutComponent implements OnInit {
         this.countries = data;
       }
     );
+  }
 
+  setupStripePaymentForm() {
+
+    // handle para elements stripe
+    var elements = this.stripe.elements();
+    // criar um elements para cartão
+    this.cardElement = elements.create('card', { hidePostalCode: true });
+    // adicionar uma instância do elemento do cartão
+    this.cardElement.mount('#card-element');
+    // event para validar as certificações
+    this.cardElement.on('change', (event: any) => {
+
+      // pegando o card-errors element
+      this.displayError = document.getElementById('card-erros');
+
+      if (event.complete) {
+        this.displayError.textContent = "";
+      }
+      else if(event.error) {
+        // mostrar validação msg de error
+        this.displayError.textContent = event.error.message;
+      }
+    });    
   }
   reviewCartDetails() {
     // escrevendo serviço de quantidade total
@@ -215,9 +256,63 @@ export class CheckoutComponent implements OnInit {
     purchase.order = order;
     purchase.orderItems = orderItems;
 
-    // chamando a API de CheckoutService
-    this.checkoutService.placeOrder(purchase).subscribe(
-      {
+    // computar payment info
+    this.paymentInfo.amount = Math.round(this.totalPrice * 100);
+    this.paymentInfo.currency = "BRL";
+
+    // validar form
+    // criar payment intent
+    // confirma payment card e place order
+    if (!this.checkoutFormGroup.invalid && this.displayError.textContent === "") {
+      
+      this.checkoutService.createPaymentIntent(this.paymentInfo).subscribe(
+        (paymentIntentResponse) => {
+          this.stripe.confirmCardPayment(paymentIntentResponse.client_secret,
+            {
+              payment_method: {
+                card: this.cardElement,
+                billing_details: {
+                  email: purchase.customer.email,
+                  name: `${purchase.customer.firstName} ${purchase.customer.lastName}`,
+                  address: {
+                    linel: purchase.billingAddress.street,
+                    city: purchase.billingAddress.city,
+                    state: purchase.billingAddress.state,
+                    postal_code: purchase.billingAddress.zipCode,
+                    country: this.billingAddressCountry.value.code
+                  }
+                }
+              }
+            }, { handleActions: false})
+            .then((result: any) => {
+              if (result.error) {
+                // informa para cliente que deve um erro
+                alert(`Houve um error: ${result.error.message}`);
+              }
+              else {
+                //  call REST API via CheckoutService
+                this.checkoutService.placeOrder(purchase).subscribe({
+                  next: (response: any) => {
+                    alert(`Seu pedido foi recebido.\nNumero do rastreamento: ${response.orderTrackingNumber}`);
+          
+                    // reset Carrinho 
+                    this.resetCart();
+                  },
+                  error: (err: any) => {
+                    alert(`Ocorreu um erro: ${err.message}`);
+                  }
+                })
+              }
+            });
+        }
+      );
+    }
+    else {
+      this.checkoutFormGroup.markAllAsTouched();
+      return;
+    }
+
+    /*this.checkoutService.placeOrder(purchase).subscribe({
         next: response => {
           alert(`Seu pedido foi recebido.\nNumero do rastreamento: ${response.orderTrackingNumber}`);
 
@@ -229,13 +324,15 @@ export class CheckoutComponent implements OnInit {
         }
       }
     );
-
+*/
     }
+    
   resetCart() {
     // reset carrinho 
     this.cartService.cartItems = [];
     this.cartService.totalPrice.next(0);
     this.cartService.totalQuantity.next(0);
+    this.cartService.persistCartItems();
 
     // reset formulario
     this.checkoutFormGroup.reset();

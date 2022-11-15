@@ -321,128 +321,24 @@
                 </div>
 
                 <!--Cartão de Crédito-->
-                <div formGroupName="creditCart" class="form-area">
-                    <h3>Cartão de Crédito</h3>
 
-                    <div class="row">
-                        <div class="col-md-2"><label>Tipo do Cartão:</label></div>
-                        <div class="col-md-9">
-                            <div class="input-space">
-                                <select formControlName="cartType">
-                                    <option>Visa</option>
-                                    <option>MasterCard</option>
-                                    
-                                </select>
+                <!--Stripe element card Credit section-->
+                <div formControlName="creditCard" class="form-area">
 
-                                <div *ngIf="creditCartType.invalid && (creditCartType.dirty || creditCartType.touched )"
-                                class="alert alert-danger mt-1">
+                    <h3>Cartão Crédito ou Débito</h3>
 
-                                <div *ngIf="creditCartType.errors.required">
-                                   Tipo do Cartão é obrigatório
-                                </div>
-                               </div>
+                    <div id="card-element">
+                        <!--sera inserido dados aqui-->
 
-                            </div>
-                        </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-2"><label>Nome no Cartão:</label></div>
-                        <div class="col-md-9">
-                            <div class="input-space">
-                                <input formControlName="nameOnCart" type="text">
+                    <!--usando um display para erros-->
+                    <div id="card-erros" class="displayError.textContent!=='': 'alert alert-danger mt-1'">
 
-                                <div *ngIf="creditCartNameOnCart.invalid && (creditCartNameOnCart.dirty || creditCartNameOnCart.touched )"
-                                class="alert alert-danger mt-1">
-
-                                <div *ngIf="creditCartNameOnCart.errors.required">
-                                 Nome do cartão é obrigatório
-                                </div>
-                            
-                               <div *ngIf="creditCartNameOnCart.errors.minlength">
-                                É obrigatório pelo menos 2 caracteres !
-                             </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-2"><label>Numero do Cartão:</label></div>
-                        <div class="col-md-9">
-                            <div class="input-space">
-                                <input formControlName="cardNumber" type="text">
-
-                                <div *ngIf="creditCartNumber.invalid && (creditCartNumber.dirty || creditCartNumber.touched )"
-                                class="alert alert-danger mt-1">
-
-                                <div *ngIf="creditCartNumber.errors.required">
-                                 Numero do cartão é obrigatório
-                                </div>
-                               
-
-                               <div *ngIf="creditCartNumber.errors.pattern">
-                                É obrigatório pelo menos 16 dígitos !
-                             </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                    <div class="row">
-                        <div class="col-md-2"><label>Código de segurança:</label></div>
-                        <div class="col-md-9">
-                            <div class="input-space">
-                                <input formControlName="securityCode" type="text">
-
-                                <div *ngIf="creditCartSecurityCode.invalid && (creditCartSecurityCode.dirty || creditCartSecurityCode.touched )"
-                                class="alert alert-danger mt-1">
-
-                                <div *ngIf="creditCartSecurityCode.errors.required">
-                                 Código de segurança cartão é obrigatório
-                                </div>
-                              
-
-                               <div *ngIf="creditCartSecurityCode.errors.pattern">
-                                É obrigatório pelo menos 3 dígitos !
-                             </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                    <div class="row">
-                        <div class="col-md-2"><label>Data de validade:</label></div>
-                        <div class="col-md-9">
-                            <div class="input-space">
-                                <select formControlName="expirationMonth">
-                                    <option *ngFor="let month of creditCardMonths">
-                                        {{ month }}
-                                    </option>
-
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-2"><label>Ano de validade:</label></div>
-                        <div class="col-md-9">
-                            <div class="input-space">
-                                <select formControlName="expirationYea" (change)="handleMonthsAndYears()">
-                                    <option *ngFor="let year of creditCardYears">
-                                        {{ year }}
-                                    </option>
-
-                                </select>
-                            </div>
-                        </div>
                     </div>
 
                 </div>
+
                 <!--Revisão da pedido-->
                 <div class="form-area">
                     <h3>Revise seu pedido</h3>

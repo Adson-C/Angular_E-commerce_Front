@@ -43,6 +43,8 @@ export class CheckoutComponent implements OnInit {
   cardElement: any;
   displayError: any = "";
 
+  isDisabled: boolean = false;
+
   constructor(private formBuild: FormBuilder,
               private adsShopFormService: AdsShopFormService,
               private cartService: CartService,
@@ -259,12 +261,15 @@ export class CheckoutComponent implements OnInit {
     // computar payment info
     this.paymentInfo.amount = Math.round(this.totalPrice * 100);
     this.paymentInfo.currency = "BRL";
+    this.paymentInfo.receiptEmail = purchase.customer.email;
 
     // validar form
     // criar payment intent
     // confirma payment card e place order
     if (!this.checkoutFormGroup.invalid && this.displayError.textContent === "") {
-      
+
+      this.isDisabled = true;
+
       this.checkoutService.createPaymentIntent(this.paymentInfo).subscribe(
         (paymentIntentResponse) => {
           this.stripe.confirmCardPayment(paymentIntentResponse.client_secret,
@@ -275,7 +280,7 @@ export class CheckoutComponent implements OnInit {
                   email: purchase.customer.email,
                   name: `${purchase.customer.firstName} ${purchase.customer.lastName}`,
                   address: {
-                    linel: purchase.billingAddress.street,
+                    line1: purchase.billingAddress.street,
                     city: purchase.billingAddress.city,
                     state: purchase.billingAddress.state,
                     postal_code: purchase.billingAddress.zipCode,
@@ -288,6 +293,7 @@ export class CheckoutComponent implements OnInit {
               if (result.error) {
                 // informa para cliente que deve um erro
                 alert(`Houve um error: ${result.error.message}`);
+                this.isDisabled = false;
               }
               else {
                 //  call REST API via CheckoutService
@@ -297,9 +303,11 @@ export class CheckoutComponent implements OnInit {
           
                     // reset Carrinho 
                     this.resetCart();
+                    this.isDisabled = false;
                   },
                   error: (err: any) => {
                     alert(`Ocorreu um erro: ${err.message}`);
+                    this.isDisabled = false;
                   }
                 })
               }
